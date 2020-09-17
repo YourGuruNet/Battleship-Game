@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battleship Game</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap"
+      rel="stylesheet"
+    />
+<style>
+    body {
+    margin: 60px auto;
+    width: 70%;
+    max-width: 950px;
+    background: linear-gradient(to right, rgb(15, 255, 239), rgb(101, 106, 230));
+}
+
+/* Game field *************************************/
+#gameField {
+	position:relative;
+	margin:0 auto 2em auto;
+	width:500px;
+	height:500px;
+}
+
+#gameField div {
+	position:absolute;
+	-webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box;    
+	box-sizing: border-box;         
+	background: #0112ffa4; 
+	border: 1px solid rgb(216, 240, 4);
+	width:50px;
+	height:50px;
+}
+/* Text *********************************************/
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    font-family: 'Architects Daughter', cursive;
+}
+h5 {
+    text-align: center;
+    font-size: 1rem;
+    font-family: 'Architects Daughter', cursive;
+}
+
+p, button, input {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    color: #333;
+	margin-bottom:1em;
+}
+</style>
+</head>
+  <body>
+    <h1 >Battleship Game</h1>
+
+    <h5 id="instruction" >Click ON the board to start the game</h5>
+
+    <div id="gameField"></div>
+    <script>
+let rows = 10;
+let cols = 10;
+let squareSize = 50;
+
+let gameContainer = document.getElementById("gameField");
+
+for (i = 0; i < cols; i++) {
+	for (j = 0; j < rows; j++) {
+		
+		let square = document.createElement("div");
+		gameContainer.appendChild(square);
+
+		square.id = 's' + j + i;			
+		
+		let topPosition = j * squareSize;
+		let leftPosition = i * squareSize;			
+		
+		square.style.top = topPosition + 'px';
+		square.style.left = leftPosition + 'px';						
+	}
+}
+
+let shootCount = 0;
+
+let gameField = [
+				[0,0,0,0,0,0,1,1,1,1],
+				[0,0,0,0,0,0,1,0,0,0],
+				[1,1,1,1,0,0,1,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,1,1,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,1,1,1,1,1]
+				]
+
+                gameContainer.addEventListener("click", shoot, false);
+
+function shoot(e) {
+	if (e.target !== e.currentTarget) {
+		let row = e.target.id.substring(1,2);
+		let col = e.target.id.substring(2,3);
+
+		if (gameField[row][col] == 0) {
+            e.target.style.background = 'red';
+            document.getElementById("instruction").innerHTML = "Bad shoot you miss! Tray again..";
+			gameField[row][col] = 3;
+			
+		} else if (gameField[row][col] == 1) {
+            e.target.style.background = 'rgb(15, 255, 27)';
+            document.getElementById("instruction").innerHTML = "Nice! You hit the ship!";
+
+			gameField[row][col] = 2;
+			
+			shootCount++;
+			if (shootCount == 20) {
+                document.getElementById("instruction").innerHTML = "All enemy battleships have been defeated! You win!";
+			}
+
+		} else if (gameField[row][col] > 1) {
+            document.getElementById("instruction").innerHTML = "You already try this field, be careful!";
+		}		
+    }
+    e.stopPropagation();
+}
+    </script>
+  </body>
+</html>
