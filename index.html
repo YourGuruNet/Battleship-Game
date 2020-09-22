@@ -1,130 +1,199 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Battleship Game</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap"
       rel="stylesheet"
     />
-<style>
-    body {
-    margin: 60px auto;
-    width: 70%;
-    max-width: 950px;
-    background: linear-gradient(to right, rgb(15, 255, 239), rgb(101, 106, 230));
-}
+    <style>
+      body {
+        margin: 60px auto;
+        width: 70%;
+        max-width: 950px;
+        background: linear-gradient(
+          to right,
+          rgb(15, 255, 239),
+          rgb(101, 106, 230)
+        );
+      }
 
-/* Game field *************************************/
-#gameField {
-	position:relative;
-	margin:0 auto 2em auto;
-	width:500px;
-	height:500px;
-}
+      /* Game field *************************************/
+      #gameField {
+        position: relative;
+        margin: 0 auto 2em auto;
+        width: 500px;
+        height: 500px;
+      }
 
-#gameField div {
-	position:absolute;
-	-webkit-box-sizing: border-box; 
-	-moz-box-sizing: border-box;    
-	box-sizing: border-box;         
-	background: #0112ffa4; 
-	border: 1px solid rgb(216, 240, 4);
-	width:50px;
-	height:50px;
-}
-/* Text *********************************************/
-h1 {
-    text-align: center;
-    font-size: 3rem;
-    font-family: 'Architects Daughter', cursive;
-}
-h5 {
-    text-align: center;
-    font-size: 1rem;
-    font-family: 'Architects Daughter', cursive;
-}
+      #gameField div {
+        position: absolute;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        background: #0112ffa4;
+        border: 1px solid rgb(216, 240, 4);
+        width: 50px;
+        height: 50px;
+      }
+      /* Text *********************************************/
+      h1 {
+        text-align: center;
+        font-size: 3rem;
+        font-family: "Architects Daughter", cursive;
+      }
+      h5 {
+        text-align: center;
+        font-size: 1rem;
+        font-family: "Architects Daughter", cursive;
+      }
 
-p, button, input {
-    font-size: 1.5em;
-    line-height: 1.4em;
-    color: #333;
-	margin-bottom:1em;
-}
-</style>
-</head>
+      p,
+      button,
+      input {
+        font-size: 1.5em;
+        line-height: 1.4em;
+        color: #333;
+        margin-bottom: 1em;
+      }
+    </style>
+  </head>
   <body>
-    <h1 >Battleship Game</h1>
+    <h1>Battleship Game</h1>
 
-    <h5 id="instruction" >Click ON the board to start the game</h5>
+    <h5 id="instruction">Click ON the board to start the game</h5>
 
     <div id="gameField"></div>
     <script>
-let rows = 10;
-let cols = 10;
-let squareSize = 50;
+      let rows = 10;
+      let cols = 10;
+      let squareSize = 50;
 
-let gameContainer = document.getElementById("gameField");
+      let gameContainer = document.getElementById("gameField");
 
-for (i = 0; i < cols; i++) {
-	for (j = 0; j < rows; j++) {
-		
-		let square = document.createElement("div");
-		gameContainer.appendChild(square);
+      for (i = 0; i < cols; i++) {
+        for (j = 0; j < rows; j++) {
+          let square = document.createElement("div");
+          gameContainer.appendChild(square);
 
-		square.id = 's' + j + i;			
-		
-		let topPosition = j * squareSize;
-		let leftPosition = i * squareSize;			
-		
-		square.style.top = topPosition + 'px';
-		square.style.left = leftPosition + 'px';						
-	}
-}
+          square.id = "s" + j + i;
 
-let shootCount = 0;
+          let topPosition = j * squareSize;
+          let leftPosition = i * squareSize;
 
-let gameField = [
-				[0,0,0,0,0,0,1,1,1,1],
-				[0,0,0,0,0,0,1,0,0,0],
-				[1,1,1,1,0,0,1,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,1,1,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,1,1,1,1,1]
-				]
+          square.style.top = topPosition + "px";
+          square.style.left = leftPosition + "px";
+        }
+      }
 
-                gameContainer.addEventListener("click", shoot, false);
+      let shootCount = 0;
 
-function shoot(e) {
-	if (e.target !== e.currentTarget) {
-		let row = e.target.id.substring(1,2);
-		let col = e.target.id.substring(2,3);
+      ////////////////////////////////////////////
+      function AB() {
+        let s = "";
+        for (let i = 0; i < N; i++) {
+          for (let j = 0; j < N; j++) {
+            s += gameField[i][j] + " ";
+          }
+          s += "\n";
+        }
+        return s;
+      }
 
-		if (gameField[row][col] == 0) {
-            e.target.style.background = 'red';
-            document.getElementById("instruction").innerHTML = "Bad shoot you miss! Tray again..";
-			gameField[row][col] = 3;
-			
-		} else if (gameField[row][col] == 1) {
-            e.target.style.background = 'rgb(15, 255, 27)';
-            document.getElementById("instruction").innerHTML = "Nice! You hit the ship!";
+      //0-t, 1-k, 2-s, 3-sk
+      let gameField = [];
+      let N = 10;
+      for (let i = 0; i < N; i++) {
+        gameField[i] = [];
 
-			gameField[row][col] = 2;
-			
-			shootCount++;
-			if (shootCount == 20) {
-                document.getElementById("instruction").innerHTML = "All enemy battleships have been defeated! You win!";
-			}
+        for (let j = 0; j < N; j++) {
+          gameField[i][j] = 0;
+        }
+      }
+      //Insert ships/////////////////////////////////////////////////////
+      var start = confirm(
+        "Hello! If you wish to start the Battleship game press OK!"
+      );
+      if (start == true) {
+		  alert("You can insert 10 ships for this game!")
+        var A1 = prompt("Insert 1. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A2 = prompt("Insert 1. ships VERTICAL position!", "Vertical line 0-9");
+		//2
+		var A3 = prompt("Insert 2. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A4 = prompt("Insert 2. ships VERTICAL position!", "Vertical line 0-9");
+		//3
+        var A5 = prompt("Insert 3. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A6 = prompt("Insert 3. ships VERTICAL position!", "Vertical line 0-9");
+		//4
+		var A7 = prompt("Insert 4. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A8 = prompt("Insert 4. ships VERTICAL position!", "Vertical line 0-9");
+		//5
+		var A9 = prompt("Insert 5. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A10 = prompt("Insert 5. ships VERTICAL position!", "Vertical line 0-9");
+		//6
+		var A11 = prompt("Insert 6. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A12 = prompt("Insert 6. ships VERTICAL position!", "Vertical line 0-9");
+		//7
+		var A13 = prompt("Insert 7. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A14 = prompt("Insert 7. ships VERTICAL position!", "Vertical line 0-9");
+		//8
+		var A15 = prompt("Insert 8. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A16 = prompt("Insert 8. ships VERTICAL position!", "Vertical line 0-9");
+		//9
+		var A17 = prompt("Insert 9. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A18 = prompt("Insert 9. ships VERTICAL position!", "Vertical line 0-9");
+		//10
+		var A19 = prompt("Insert 10. ships HORIZONTAL position!", "Horizontal line 0-9");
+        var A20 = prompt("Insert 10. ships VERTICAL position!", "Vertical line 0-9");
+		alert('You are ready to start Battleship Game!')
+      } else {
+        alert("Your game is over! Restart the browser and try again");
+      }
 
-		} else if (gameField[row][col] > 1) {
-            document.getElementById("instruction").innerHTML = "You already try this field, be careful!";
-		}		
-    }
-    e.stopPropagation();
-}
+      gameField[A1][A2] = 1;
+      gameField[A3][A4] = 1;
+	  gameField[A5][A6] = 1;
+      gameField[A7][A8] = 1;
+	  gameField[A9][A10] = 1;
+      gameField[A11][A12] = 1;
+	  gameField[A13][A14] = 1;
+      gameField[A15][A16] = 1;
+	  gameField[A17][A18] = 1;
+      gameField[A19][A20] = 1;
+
+      /////////////////////////
+
+      gameContainer.addEventListener("click", shoot, false);
+
+      function shoot(e) {
+        if (e.target !== e.currentTarget) {
+          let row = e.target.id.substring(1, 2);
+          let col = e.target.id.substring(2, 3);
+
+          if (gameField[row][col] == 0) {
+            e.target.style.background = "red";
+            document.getElementById("instruction").innerHTML =
+              "Bad shoot you miss! Tray again..";
+            gameField[row][col] = 3;
+          } else if (gameField[row][col] == 1) {
+            e.target.style.background = "rgb(15, 255, 27)";
+            document.getElementById("instruction").innerHTML =
+              "Nice! You hit the ship!";
+
+            gameField[row][col] = 2;
+
+            shootCount++;
+            if (shootCount == 10) {
+              document.getElementById("instruction").innerHTML =
+                "All enemy battleships have been defeated! You win!";
+            }
+          } else if (gameField[row][col] > 1) {
+            document.getElementById("instruction").innerHTML =
+              "You already try this field, be careful!";
+          }
+        }
+        e.stopPropagation();
+      }
     </script>
   </body>
 </html>

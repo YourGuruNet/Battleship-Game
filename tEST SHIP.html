@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+    function AB() {
+        let s = "";
+        for (let i = 0; i < N; i++) {
+          for (let j = 0; j < N; j++) {
+            s += A[i][j] + " ";
+          }
+          s += "\n";
+        }
+        return s;
+      };
+
+      //0-t, 1-k, 2-s, 3-sk
+      let A = [];
+      let N = 10;
+      for (let i = 0; i < N; i++) {
+        A[i] = [];
+
+        for (let j = 0; j < N; j++) {
+          A[i][j] = 0;
+        }
+      }
+      A[3][3] = 1;
+      A[3][4] = 1;
+      A[3][5] = 1;
+    
+    let answer = '';
+    while (true) {
+       answer = prompt(AB(), '');
+       if (B[answer[0]] [answer[1]] == 0) {
+        B[answer[0]] [answer[1]] == 1;
+       } else {
+           alert('This field is already taken')
+       }
+    }
+    function ships() {
+        for (let i=0; i < N; i++) {
+            for (let j=0; j < N; j++) {
+                if (A[i][j] == 1)
+                return true;
+            }
+        }
+        return false;
+    }
+    </script>
+  </body>
+</html>
